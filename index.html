@@ -100,6 +100,9 @@ button:focus-visible{outline:4px solid #fff;outline-offset:3px;}
     <button class="iconbtn" id="home" aria-label="Go to the start page">
       <svg viewBox="0 0 24 24" fill="none" stroke="#22324A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M10 20v-5.5h4V20"/></svg>
     </button>
+    <button class="iconbtn" id="view" aria-label="Switch to driver's view">
+      <svg id="viewIcon" viewBox="0 0 24 24" fill="none" stroke="#22324A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></svg>
+    </button>
     <button class="iconbtn" id="reset" aria-label="Back to the road">
       <svg viewBox="0 0 24 24" fill="none" stroke="#22324A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 3v5h5"/></svg>
     </button>
@@ -544,7 +547,7 @@ function makeSedan({ color, stretch = 0, police = false }) {
     };
   }
   addWheels(v, [[1.35, 0.4, 0.3, -0.84, 1], [1.35, 0.4, 0.3, 0.84, 1], [X(-1.3), 0.4, 0.3, -0.84], [X(-1.3), 0.4, 0.3, 0.84]]);
-  return finish(v, { len: 4.6 + s, halfW: 1.0, height: 1.7, rearOff: 1.3 + s / 2, turn: 1.05 * Math.sqrt(2.65 / (2.65 + s)) });
+  return finish(v, { len: 4.6 + s, halfW: 1.0, height: 1.7, rearOff: 1.3 + s / 2, turn: 1.05 * Math.sqrt(2.65 / (2.65 + s)), eye: [-0.45 + s / 2, 1.46, 0.36], dash: true });
 }
 
 /* ---------- giant fire truck ---------- */
@@ -584,7 +587,7 @@ function makeFireTruck(color = 0xD7261E) {
   v.update = t => { const f = Math.floor(t * 5) % 2; la.emissiveIntensity = f ? 3 : 0.2; lb.emissiveIntensity = f ? 0.2 : 3; };
   addWheels(v, [[4.0, 0.62, 0.45, -1.05, 1], [4.0, 0.62, 0.45, 1.05, 1],
     [-2.0, 0.62, 0.5, -1.02], [-2.0, 0.62, 0.5, 1.02], [-3.3, 0.62, 0.5, -1.02], [-3.3, 0.62, 0.5, 1.02]]);
-  return finish(v, { len: 10.3, halfW: 1.3, height: 3.6, rearOff: 2.84, turn: 0.66 });
+  return finish(v, { len: 10.3, halfW: 1.3, height: 3.6, rearOff: 2.84, turn: 0.66, eye: [3.45, 2.75, 0.6], dash: true });
 }
 
 /* ---------- school bus ---------- */
@@ -621,7 +624,7 @@ function makeBus(color = 0xFFB703) {
   stop.add(new THREE.Mesh(rim8, whiteMat), sm);
   stop.rotation.z = Math.PI / 8; stop.position.set(3.0, 1.55, -1.33); B.add(stop);
   addWheels(v, [[3.2, 0.55, 0.4, -1.02, 1], [3.2, 0.55, 0.4, 1.02, 1], [-2.6, 0.55, 0.45, -1.0], [-2.6, 0.55, 0.45, 1.0]]);
-  return finish(v, { len: 10.3, halfW: 1.3, height: 3.4, rearOff: 2.6, turn: 0.71 });
+  return finish(v, { len: 10.3, halfW: 1.3, height: 3.4, rearOff: 2.6, turn: 0.71, eye: [3.25, 2.55, 0.6], dash: true });
 }
 
 /* ---------- race car ---------- */
@@ -649,7 +652,7 @@ function makeRaceCar(color = 0xFF7A1A) {
   const visor = new THREE.Mesh(new THREE.SphereGeometry(0.2, 20, 14, -0.9, 1.8, 1.2, 0.6), glassMat); visor.position.copy(helmet.position); visor.scale.setScalar(1.03); visor.rotation.y = Math.PI / 2; B.add(visor);
   B.add(box(0.05, 0.12, 0.5, tailMat, -2.28, 0.4, 0));
   addWheels(v, [[1.55, 0.36, 0.38, -0.84, 1], [1.55, 0.36, 0.38, 0.84, 1], [-1.55, 0.42, 0.48, -0.86], [-1.55, 0.42, 0.48, 0.86]]);
-  return finish(v, { len: 4.8, halfW: 1.05, height: 1.25, rearOff: 1.55, turn: 1.0 });
+  return finish(v, { len: 4.8, halfW: 1.05, height: 1.25, rearOff: 1.55, turn: 1.0, eye: [-0.12, 1.08, 0], dash: false });
 }
 
 /* ---------- the Lego truck (built by Vijay's son, recreated brick by brick) ---------- */
@@ -794,6 +797,7 @@ function makeLegoTruck(color = 0x1F9FD6) {
   driver.group.position.set(L / 2 - 2.3 * u, Y0 + 0.1, 0);
   driver.arms.forEach(a => a.rotation.z = 1.25);
   B.add(driver.group);
+  v.driverFig = driver.group;
   const fan = makeMinifig({ torso: 0xA0A5A9, legs: 0x5A5D5F, arms: 0xA5CA18, deco: 'logo' });
   fan.group.position.set(L / 2 - 7 * u, Y0 + 0.1, 0);
   B.add(fan.group);
@@ -815,7 +819,7 @@ function makeLegoTruck(color = 0x1F9FD6) {
     if (steer) v.front.push(wh.pivot);
     v.spins.push(wh.spin);
   }));
-  const out = finish(v, { len: L, halfW: 1.2, height: 1.4, rearOff: -rx, turn: 1.05 * Math.sqrt(2.65 / (fx - rx)) });
+  const out = finish(v, { len: L, halfW: 1.2, height: 1.4, rearOff: -rx, turn: 1.05 * Math.sqrt(2.65 / (fx - rx)), eye: [L / 2 - 2.3 * u, 1.42, 0], dash: false, ownWheel: true });
   ws.forEach(m => m.castShadow = false);
   return out;
 }
@@ -1076,6 +1080,38 @@ addEventListener('keydown', e => { if (e.code === 'Escape') goHome(); });
 document.querySelectorAll('.timebtn').forEach(b =>
   b.addEventListener('pointerdown', () => startGame(+b.dataset.min)));
 
+/* ---------- driver's view ---------- */
+const ICON_EYE = '<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3.2" fill="#22324A"/>';
+const ICON_CAR = '<path d="M3 16v-3.5l2.2-4.8A2 2 0 0 1 7 6.5h10a2 2 0 0 1 1.8 1.2L21 12.5V16z"/><circle cx="7.5" cy="16.5" r="2" fill="#22324A"/><circle cx="16.5" cy="16.5" r="2" fill="#22324A"/>';
+let driverView = false;
+const viewBtn = document.getElementById('view'), viewIcon = document.getElementById('viewIcon');
+function setView(on) {
+  driverView = on;
+  viewIcon.innerHTML = on ? ICON_CAR : ICON_EYE;
+  viewBtn.setAttribute('aria-label', on ? 'Switch to outside view' : "Switch to driver's view");
+  if (actx) tone('sine', on ? 600 : 900, 0, 0.15, 0.1, on ? 900 : 600);
+}
+setView(false);
+viewBtn.addEventListener('pointerdown', () => setView(!driverView));
+addEventListener('keydown', e => { if (e.code === 'KeyC' && started) setView(!driverView); });
+
+/* cockpit pieces ride along with the camera */
+scene.add(camera);
+const cockpit = new THREE.Group(); cockpit.scale.setScalar(0.55); camera.add(cockpit); cockpit.visible = false;
+const dash = box(2.4, 0.26, 0.6, new THREE.MeshStandardMaterial({ color: col(0x2A2E36), roughness: 0.8 }), 0, -0.6, -0.95);
+dash.position.y = -0.7; dash.rotation.x = 0.25; cockpit.add(dash);
+const gauge = new THREE.Mesh(new THREE.CircleGeometry(0.07, 24), new THREE.MeshBasicMaterial({ color: col(0xDDEBFF) }));
+gauge.position.set(0.25, -0.56, -0.7); gauge.rotation.x = -0.3; cockpit.add(gauge);
+const cWheelTilt = new THREE.Group(); cWheelTilt.position.set(0, -0.6, -0.68); cWheelTilt.rotation.x = -0.45; cockpit.add(cWheelTilt);
+const cWheel = new THREE.Group(); cWheelTilt.add(cWheel);
+const wheelMatC = new THREE.MeshStandardMaterial({ color: col(0x3A4A63), roughness: 0.5 });
+cWheel.add(new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.026, 12, 40), wheelMatC));
+cWheel.add(box(0.03, 0.15, 0.02, wheelMatC, 0, -0.08, 0), box(0.32, 0.03, 0.02, wheelMatC, 0, 0, 0));
+const hubC = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.052, 0.03, 24), new THREE.MeshStandardMaterial({ color: col(0xFFCB2E), roughness: 0.4 }));
+hubC.rotation.x = Math.PI / 2; cWheel.add(hubC);
+const topMark = box(0.04, 0.05, 0.03, new THREE.MeshStandardMaterial({ color: col(0xEF3B3B) }), 0, 0.16, 0); cWheel.add(topMark);
+const eyeV = new THREE.Vector3();
+
 /* ---------- loop ---------- */
 const fwd = new THREE.Vector3(), camTarget = new THREE.Vector3(), lookTarget = new THREE.Vector3();
 let last = performance.now(), t = 0, orbit = 0;
@@ -1206,7 +1242,20 @@ function step(dt) {
 
   /* camera */
   const L = player.len, H = player.height;
-  if (!started) {
+  const inside = started && driverView;
+  const wantFov = inside ? 72 : 60;
+  if (camera.fov !== wantFov) { camera.fov = wantFov; camera.updateProjectionMatrix(); }
+  cockpit.visible = inside && !player.ownWheel;
+  if (player.driverFig) player.driverFig.visible = !inside;
+  dash.visible = gauge.visible = !!player.dash;
+  cWheel.rotation.z = -wheelAngle * Math.PI / 180;
+  if (inside) {
+    player.group.updateMatrixWorld();
+    eyeV.set(player.eye[0], player.eye[1], player.eye[2]);
+    player.group.localToWorld(eyeV);
+    camera.position.copy(eyeV);
+    lookTarget.set(eyeV.x + fwd.x * 20, eyeV.y - 1.0, eyeV.z + fwd.z * 20);
+  } else if (!started) {
     orbit += dt * 0.35;
     const r = L * 0.85 + 5;
     camTarget.set(P.x + Math.cos(orbit) * r, H + 1.6, P.z + Math.sin(orbit) * r);

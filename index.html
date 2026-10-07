@@ -68,7 +68,23 @@ background:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg�
 .timebtn b{font-size:clamp(42px,12vw,54px);font-weight:800;color:var(–cream);-webkit-text-stroke:5px var(–ink);paint-order:stroke fill;}
 .timebtn small{font-size:17px;font-weight:800;color:var(–ink);}
 .timebtn:active{transform:translateY(9px);box-shadow:0 0 0 var(–ink);}
-#start.wait .times{pointer-events:none;opacity:.5;}
+#start.wait #play{pointer-events:none;opacity:.5;}
+.playrow{display:flex;align-items:center;gap:22px;}
+.playrow .spacer{width:56px;}
+#play{width:124px;height:124px;border-radius:50%;background:var(–cherry);border:6px solid var(–ink);box-shadow:0 9px 0 var(–ink);display:grid;place-items:center;cursor:pointer;padding:0;animation:breathe 1.6s ease-in-out infinite;}
+#play:active{transform:translateY(9px);box-shadow:0 0 0 var(–ink);}
+#play svg{width:54px;margin-left:9px;}
+@keyframes breathe{50%{scale:1.07}}
+#settings{position:fixed;inset:0;display:none;place-items:center;background:rgba(34,50,74,.5);z-index:10;padding:20px;}
+#settings.show{display:grid;}
+#settings .card{background:var(–cream);border:5px solid var(–ink);border-radius:28px;box-shadow:0 9px 0 var(–ink);padding:22px 24px 26px;width:min(92vw,360px);color:var(–ink);text-align:center;}
+#settings h2{margin:0 0 6px;font-size:32px;font-weight:800;}
+#settings .label{margin:6px 0 10px;font-size:18px;font-weight:800;opacity:.75;}
+.opts{display:flex;gap:10px;justify-content:center;}
+.opt{flex:1;height:58px;border-radius:18px;border:4px solid var(–ink);background:#fff;box-shadow:0 5px 0 var(–ink);font-family:inherit;font-weight:800;font-size:22px;color:var(–ink);cursor:pointer;}
+.opt.on{background:var(–sun);transform:translateY(-3px);box-shadow:0 8px 0 var(–ink);}
+.done{margin-top:22px;width:100%;height:58px;border-radius:18px;border:4px solid var(–ink);background:var(–leaf);box-shadow:0 6px 0 var(–ink);font-family:inherit;font-weight:800;font-size:24px;color:var(–cream);-webkit-text-stroke:1px var(–ink);cursor:pointer;}
+.done:active,.opt:active{transform:translateY(5px);box-shadow:0 0 0 var(–ink);}
 #result{display:none;align-items:center;gap:10px;background:var(–cream);border:6px solid var(–ink);border-radius:999px;box-shadow:0 8px 0 var(–ink);padding:4px 34px 4px 14px;font-size:clamp(56px,15vw,80px);font-weight:800;color:var(–ink);line-height:1.1;animation:pop .6s ease-out;}
 #result.show{display:flex;}
 #result svg{width:1em;height:1em;}
@@ -78,6 +94,9 @@ background:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg�
 .timer.hurry svg *{stroke:var(–cream);}
 @keyframes throb{50%{transform:translateX(-50%) scale(1.12)}}
 @media (max-width:520px){.timer{top:calc(80px + env(safe-area-inset-top));}}
+body.driver #wheel{opacity:0;}
+body.driver #wheelWrap{left:50%;transform:translateX(-50%);width:min(40vw,230px);}
+body.driver #pedals{flex-direction:column;align-items:flex-end;}
 @media (prefers-reduced-motion:reduce){.score.pop,.timer.hurry,#result{animation:none}}
 button:focus-visible{outline:4px solid #fff;outline-offset:3px;}
 </style>
@@ -150,11 +169,28 @@ button:focus-visible{outline:4px solid #fff;outline-offset:3px;}
       <button class="vbtn" aria-label="Very long car"><svg viewBox="0 0 80 42"><path d="M2 33 L2 27 Q3 24 8 24 L15 19 Q17 18 20 18 L66 18 Q69 18 71 21 L73 24 Q78 25 78 29 L78 33 Z" fill="#F2F2F2" stroke="#22324A" stroke-width="3" stroke-linejoin="round"/><path d="M18 23 L21 20 H30 V23Z M33 20 H43 V23 H33Z M46 20 H56 V23 H46Z M59 20 H67 L70 23 H59Z" fill="#22324A"/><circle cx="12" cy="34" r="5" fill="#22324A"/><circle cx="12" cy="34" r="2.2" fill="#C9CDD4"/><circle cx="68" cy="34" r="5" fill="#22324A"/><circle cx="68" cy="34" r="2.2" fill="#C9CDD4"/></svg></button>
       <button class="vbtn special" aria-label="Lego truck"><svg viewBox="0 0 80 42"><rect x="2" y="22" width="74" height="8" rx="1.5" fill="#36AEBF" stroke="#22324A" stroke-width="2.5"/><rect x="4" y="18" width="7" height="4" fill="#F2A7C8"/><rect x="11" y="18" width="5" height="4" fill="#8E5BB5"/><rect x="16" y="18" width="9" height="4" fill="#583927"/><rect x="25" y="18" width="8" height="4" fill="#C91A09"/><rect x="33" y="18" width="9" height="4" fill="#F4F4F4"/><rect x="42" y="18" width="5" height="4" fill="#0055BF"/><path d="M50 21 V12 H56 V21 Z" fill="#A0A5A9"/><path d="M50 13 L46 6 M56 13 L60 6" stroke="#A5CA18" stroke-width="3" stroke-linecap="round"/><circle cx="53" cy="8" r="3.4" fill="#F7D117" stroke="#22324A" stroke-width="1.2"/><path d="M61 21 V12 H67 V21 Z" fill="#8EC5F0"/><circle cx="64" cy="8" r="3.4" fill="#F7D117" stroke="#22324A" stroke-width="1.2"/><rect x="70" y="11" width="6" height="11" rx="1" fill="#DDF2FF" fill-opacity=".8" stroke="#22324A" stroke-width="1.8"/><circle cx="58" cy="33" r="6" fill="#22324A"/><circle cx="58" cy="33" r="3" fill="#A0A5A9"/><circle cx="36" cy="33" r="6" fill="#22324A"/><circle cx="36" cy="33" r="3" fill="#A0A5A9"/></svg></button>
   </div>
-  <div class="times">
-    <button class="timebtn" data-min="1" aria-label="Play for 1 minute"><b>1</b><small>min</small></button>
-    <button class="timebtn" data-min="3" aria-label="Play for 3 minutes"><b>3</b><small>min</small></button>
-    <button class="timebtn" data-min="5" aria-label="Play for 5 minutes"><b>5</b><small>min</small></button>
+  <div class="playrow">
+    <span class="spacer"></span>
+    <button id="play" aria-label="Play">
+      <svg viewBox="0 0 24 24"><path d="M5 3.5v17L20.5 12z" fill="#FFF8E6" stroke="#22324A" stroke-width="2" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="iconbtn" id="settingsBtn" aria-label="Settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#22324A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
   </div>
+  </div>
+</div>
+
+<div id="settings" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+  <div class="card">
+    <h2 id="setTitle">Settings</h2>
+    <p class="label">Play time</p>
+    <div class="opts" id="timeOpts">
+      <button class="opt" data-min="1">1 min</button>
+      <button class="opt on" data-min="3">3 min</button>
+      <button class="opt" data-min="5">5 min</button>
+    </div>
+    <button class="done" id="setDone">Done</button>
   </div>
 </div>
 
@@ -797,7 +833,6 @@ function makeLegoTruck(color = 0x1F9FD6) {
   driver.group.position.set(L / 2 - 2.3 * u, Y0 + 0.1, 0);
   driver.arms.forEach(a => a.rotation.z = 1.25);
   B.add(driver.group);
-  v.driverFig = driver.group;
   const fan = makeMinifig({ torso: 0xA0A5A9, legs: 0x5A5D5F, arms: 0xA5CA18, deco: 'logo' });
   fan.group.position.set(L / 2 - 7 * u, Y0 + 0.1, 0);
   B.add(fan.group);
@@ -806,6 +841,7 @@ function makeLegoTruck(color = 0x1F9FD6) {
   sw.position.set(L / 2 - 2.3 * u + 0.38, Y0 + 0.52, 0); B.add(sw);
   const col_ = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.42, 8), trimMat);
   col_.position.set(L / 2 - 2.3 * u + 0.44, Y0 + 0.3, 0); col_.rotation.z = 0.35; B.add(col_);
+  v.hideInside = [driver.group, sw, col_];
   v.update = t => {
     fan.arms[0].rotation.z = 2.75 + Math.sin(t * 7) * 0.25;
     fan.arms[1].rotation.z = 2.75 + Math.sin(t * 7 + 1.4) * 0.25;
@@ -819,7 +855,7 @@ function makeLegoTruck(color = 0x1F9FD6) {
     if (steer) v.front.push(wh.pivot);
     v.spins.push(wh.spin);
   }));
-  const out = finish(v, { len: L, halfW: 1.2, height: 1.4, rearOff: -rx, turn: 1.05 * Math.sqrt(2.65 / (fx - rx)), eye: [L / 2 - 2.3 * u, 1.42, 0], dash: false, ownWheel: true });
+  const out = finish(v, { len: L, halfW: 1.2, height: 1.4, rearOff: -rx, turn: 1.05 * Math.sqrt(2.65 / (fx - rx)), eye: [L / 2 - 2.3 * u, 1.42, 0], dash: false });
   ws.forEach(m => m.castShadow = false);
   return out;
 }
@@ -992,7 +1028,7 @@ const keys = {};
 addEventListener('keydown', e => {
   keys[e.code] = true;
   if (e.code === 'Space') { if (started) honk(); e.preventDefault(); }
-  if (e.code === 'Enter' && !started && !startEl.classList.contains('wait')) startGame(3);
+  if (e.code === 'Enter' && !started && !startEl.classList.contains('wait')) startGame(playMins);
 });
 addEventListener('keyup', e => keys[e.code] = false);
 addEventListener('contextmenu', e => e.preventDefault());
@@ -1077,8 +1113,17 @@ function goHome() {
 }
 document.getElementById('home').addEventListener('pointerdown', goHome);
 addEventListener('keydown', e => { if (e.code === 'Escape') goHome(); });
-document.querySelectorAll('.timebtn').forEach(b =>
-  b.addEventListener('pointerdown', () => startGame(+b.dataset.min)));
+/* settings */
+let playMins = 3;
+const settingsEl = document.getElementById('settings');
+document.getElementById('play').addEventListener('pointerdown', () => startGame(playMins));
+document.getElementById('settingsBtn').addEventListener('click', () => settingsEl.classList.add('show'));
+document.getElementById('setDone').addEventListener('click', () => settingsEl.classList.remove('show'));
+settingsEl.addEventListener('click', e => { if (e.target === settingsEl) settingsEl.classList.remove('show'); });
+document.querySelectorAll('#timeOpts .opt').forEach(b => b.addEventListener('click', () => {
+  playMins = +b.dataset.min;
+  document.querySelectorAll('#timeOpts .opt').forEach(o => o.classList.toggle('on', o === b));
+}));
 
 /* ---------- driver's view ---------- */
 const ICON_EYE = '<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3.2" fill="#22324A"/>';
@@ -1087,6 +1132,7 @@ let driverView = false;
 const viewBtn = document.getElementById('view'), viewIcon = document.getElementById('viewIcon');
 function setView(on) {
   driverView = on;
+  document.body.classList.toggle('driver', on);
   viewIcon.innerHTML = on ? ICON_CAR : ICON_EYE;
   viewBtn.setAttribute('aria-label', on ? 'Switch to outside view' : "Switch to driver's view");
   if (actx) tone('sine', on ? 600 : 900, 0, 0.15, 0.1, on ? 900 : 600);
@@ -1102,7 +1148,7 @@ const dash = box(2.4, 0.26, 0.6, new THREE.MeshStandardMaterial({ color: col(0x2
 dash.position.y = -0.7; dash.rotation.x = 0.25; cockpit.add(dash);
 const gauge = new THREE.Mesh(new THREE.CircleGeometry(0.07, 24), new THREE.MeshBasicMaterial({ color: col(0xDDEBFF) }));
 gauge.position.set(0.25, -0.56, -0.7); gauge.rotation.x = -0.3; cockpit.add(gauge);
-const cWheelTilt = new THREE.Group(); cWheelTilt.position.set(0, -0.6, -0.68); cWheelTilt.rotation.x = -0.45; cockpit.add(cWheelTilt);
+const cWheelTilt = new THREE.Group(); cWheelTilt.rotation.x = -0.3; cWheelTilt.visible = false; camera.add(cWheelTilt);
 const cWheel = new THREE.Group(); cWheelTilt.add(cWheel);
 const wheelMatC = new THREE.MeshStandardMaterial({ color: col(0x3A4A63), roughness: 0.5 });
 cWheel.add(new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.026, 12, 40), wheelMatC));
@@ -1111,6 +1157,15 @@ const hubC = new THREE.Mesh(new THREE.CylinderGeometry(0.052, 0.052, 0.03, 24), 
 hubC.rotation.x = Math.PI / 2; cWheel.add(hubC);
 const topMark = box(0.04, 0.05, 0.03, new THREE.MeshStandardMaterial({ color: col(0xEF3B3B) }), 0, 0.16, 0); cWheel.add(topMark);
 const eyeV = new THREE.Vector3();
+/* put the 3D steering wheel exactly under the (invisible) touch area so it is the one you grab */
+function placeCockpitWheel() {
+  const r = wheelWrap.getBoundingClientRect(), d = 0.42;
+  const th = Math.tan(camera.fov * Math.PI / 360);
+  const nx = (r.left + r.width / 2) / innerWidth * 2 - 1, ny = 1 - (r.top + r.height / 2) / innerHeight * 2;
+  cWheelTilt.position.set(nx * d * th * camera.aspect, ny * d * th, -d);
+  const worldR = (r.width / 2 * 0.84) / (innerHeight / 2) * d * th;
+  cWheelTilt.scale.setScalar(worldR / 0.16);
+}
 
 /* ---------- loop ---------- */
 const fwd = new THREE.Vector3(), camTarget = new THREE.Vector3(), lookTarget = new THREE.Vector3();
@@ -1245,8 +1300,10 @@ function step(dt) {
   const inside = started && driverView;
   const wantFov = inside ? 72 : 60;
   if (camera.fov !== wantFov) { camera.fov = wantFov; camera.updateProjectionMatrix(); }
-  cockpit.visible = inside && !player.ownWheel;
-  if (player.driverFig) player.driverFig.visible = !inside;
+  cockpit.visible = inside;
+  cWheelTilt.visible = inside;
+  (player.hideInside || []).forEach(o => o.visible = !inside);
+  if (inside) placeCockpitWheel();
   dash.visible = gauge.visible = !!player.dash;
   cWheel.rotation.z = -wheelAngle * Math.PI / 180;
   if (inside) {

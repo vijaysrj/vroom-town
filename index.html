@@ -99,30 +99,62 @@ body.driver #wheel{opacity:0;}
 body.driver #wheelWrap{left:50%;transform:translateX(-50%);width:min(40vw,230px);}
 body.driver #pedals{flex-direction:column;align-items:flex-end;}
 @media (prefers-reduced-motion:reduce){.score.pop,.timer.hurry,#result{animation:none}}
+@media (orientation:landscape) and (max-height:560px){
+#start{padding:calc(6px + env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom));}
+#start h1{font-size:46px;-webkit-text-stroke:4px var(–ink);text-shadow:0 5px 0 var(–ink);}
+.menu{gap:9px;}
+.vehicles{grid-template-columns:repeat(8,auto);gap:7px;}
+.vbtn{width:clamp(62px,10vw,92px);height:50px;border-radius:14px;}
+#start .swatches{padding:5px 12px 8px;}
+.swatch{width:34px;height:34px;border-width:3px;}
+#result{font-size:40px;border-width:4px;box-shadow:0 5px 0 var(–ink);padding:2px 24px 2px 10px;}
+#play{width:84px;height:84px;border-width:5px;box-shadow:0 6px 0 var(–ink);}
+#play svg{width:38px;margin-left:6px;}
+.playrow .iconbtn{width:50px;height:50px;}
+.playrow .spacer{width:50px;}
+}
 button:focus-visible{outline:4px solid #fff;outline-offset:3px;}
 
 @media (max-width:440px){.topright{gap:7px;}.topright .iconbtn{width:46px;height:46px;border-radius:15px;}.topright .iconbtn svg{width:26px;height:26px;}}
-#settings{position:fixed;inset:0;display:none;place-items:center;background:rgba(34,50,74,.5);z-index:10;padding:20px;overflow:auto;}
-#settings.show{display:grid;}
+#settings{position:fixed;inset:0;display:none;background:rgba(34,50,74,.5);z-index:10;padding:16px;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;}
+#settings.show{display:flex;}
+#settings .card{margin:auto;}
+.opt.on::before{content:‘✓’;margin-right:4px;}
+.opt{white-space:nowrap;padding:0 6px;}
+@media (max-height:520px){#settings .card{padding:14px 18px 16px;}#settings h2{font-size:24px;}#settings .label{margin:4px 0 6px;font-size:15px;}.opt{height:46px;}.done{height:48px;margin-top:14px;}}
 #settings .hint{margin:8px 0 0;font-size:14px;font-weight:600;opacity:.75;}
 .opt:disabled{opacity:.4;}
 .opt.rec{background:var(–cherry);color:#fff;}
 .vbtn.build{background:#fff;display:grid;place-items:center;}
 .vbtn.build img{width:100%;height:100%;object-fit:contain;display:block;}
-#builder{position:fixed;inset:0;background:var(–cream);display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:calc(10px + env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom));z-index:12;color:var(–ink);}
+#builder{position:fixed;inset:0;background:var(–cream);display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;overflow:hidden;padding:calc(10px + env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom));z-index:12;color:var(–ink);}
 #builder.show{display:flex;}
-.bhead{width:min(100%,440px);display:flex;align-items:center;justify-content:space-between;}
+.bhead{width:min(100%,440px);min-height:0;display:flex;align-items:center;justify-content:space-between;}
 .bhead h2{margin:0;font-size:clamp(22px,6vw,30px);font-weight:800;}
-.bboard{background:#5A5D5F;border:5px solid var(–ink);border-radius:18px;padding:6px;box-shadow:0 6px 0 var(–ink);}
+.bboard{background:#5A5D5F;border:5px solid var(–ink);border-radius:18px;padding:6px;box-shadow:0 6px 0 var(–ink);display:flex;flex-direction:column;}
+.bctrl{display:flex;flex-direction:column;align-items:center;gap:10px;}
+#builder.land{display:none;}
+#builder.land.show{display:grid;grid-template-columns:auto auto;grid-template-rows:auto auto;column-gap:18px;row-gap:8px;align-content:center;justify-content:center;align-items:center;}
+#builder.land .bhead{grid-column:1 / 3;width:100%;}
+#builder.land .bboard{flex-direction:row-reverse;}
+#builder.land .bfront{height:auto;width:calc(var(–cell) * .9);margin:0 0 0 4px;border-radius:4px 12px 12px 4px;}
+#builder.land .bfront svg{width:80%;height:auto;transform:rotate(90deg);}
+#builder.land .bctrl{max-width:300px;}
+#builder.land .bsizes,#builder.land .bpal{gap:6px;}
+#builder.land .szb{min-width:40px;height:40px;}
+#builder.land .pal{width:34px;height:34px;}
+#builder.land .drive{height:54px;font-size:24px;padding:0 20px;}
+#builder.land .del{height:54px;font-size:15px;}
 .bfront{height:calc(var(–cell) * .9);background:rgba(207,239,255,.9);border-radius:12px 12px 4px 4px;margin-bottom:4px;display:grid;place-items:center;}
 .bfront svg{height:80%;}
-#bGrid{display:grid;grid-template-columns:repeat(8,var(–cell));grid-auto-rows:var(–cell);gap:2px;touch-action:none;}
+#bGrid{display:grid;grid-template-columns:repeat(8,var(–cell));grid-template-rows:repeat(22,var(–cell));gap:2px;touch-action:none;}
+#builder.land #bGrid{grid-template-columns:repeat(22,var(–cell));grid-template-rows:repeat(8,var(–cell));}
 .bcell{border-radius:4px;background:#6C6F71;position:relative;box-shadow:inset 0 -3px 0 rgba(0,0,0,.22);grid-row-end:span 1;}
 .bcell::after{content:’’;position:absolute;inset:27%;border-radius:50%;background:rgba(255,255,255,.14);box-shadow:0 2px 0 rgba(0,0,0,.25);}
 .bbrick{pointer-events:none;position:relative;z-index:1;border-radius:5px;box-shadow:inset 0 0 0 2px rgba(0,0,0,.28),inset 0 -4px 0 rgba(0,0,0,.18);margin:1px;
 background-image:radial-gradient(circle,rgba(255,255,255,.4) 0 26%,rgba(0,0,0,.18) 27% 31%,transparent 32%);background-size:calc(var(–cell) + 2px) calc(var(–cell) + 2px);background-position:-1px -1px;}
-.bsizes{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;max-width:440px;}
-.szb{min-width:46px;height:46px;padding:4px;border-radius:12px;border:3px solid var(–ink);background:#fff;box-shadow:0 4px 0 var(–ink);cursor:pointer;display:grid;place-items:center;}
+.bsizes{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;max-width:440px;}
+.szb{min-width:42px;height:42px;padding:3px;border-radius:12px;border:3px solid var(–ink);background:#fff;box-shadow:0 4px 0 var(–ink);cursor:pointer;display:grid;place-items:center;}
 .szb.on{background:var(–sun);transform:translateY(-3px);box-shadow:0 7px 0 var(–ink);}
 .szb.turn svg{width:26px;height:26px;}
 .brow{display:flex;gap:12px;align-items:center;}
@@ -131,8 +163,8 @@ background-image:radial-gradient(circle,rgba(255,255,255,.4) 0 26%,rgba(0,0,0,.1
 .del[hidden]{display:none;}
 .del.sure{animation:throbDel .6s ease-in-out infinite;}
 @keyframes throbDel{50%{transform:scale(1.06)}}
-.bpal{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:440px;}
-.pal{width:40px;height:40px;border-radius:12px;border:4px solid var(–ink);box-shadow:0 4px 0 var(–ink);cursor:pointer;padding:0;display:grid;place-items:center;background:#fff;}
+.bpal{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;max-width:330px;}
+.pal{width:36px;height:36px;border-radius:12px;border:4px solid var(–ink);box-shadow:0 4px 0 var(–ink);cursor:pointer;padding:0;display:grid;place-items:center;background:#fff;}
 .pal.on{transform:translateY(-4px);box-shadow:0 8px 0 var(–ink),0 0 0 3px var(–sun);}
 .pal svg{width:22px;height:22px;}
 .drive{height:64px;padding:0 34px;border-radius:22px;border:5px solid var(–ink);background:var(–leaf);box-shadow:0 7px 0 var(–ink);font-family:inherit;font-weight:800;font-size:30px;color:var(–cream);-webkit-text-stroke:1.5px var(–ink);cursor:pointer;display:flex;align-items:center;gap:10px;}
@@ -263,11 +295,13 @@ background-image:radial-gradient(circle,rgba(255,255,255,.4) 0 26%,rgba(0,0,0,.1
     <div class="bfront"><svg viewBox="0 0 24 24" fill="#22324A"><path d="M12 4 20 16H4z"/></svg></div>
     <div id="bGrid"></div>
   </div>
+  <div class="bctrl" id="bCtrl">
   <div class="bsizes" id="bSizes"></div>
   <div class="bpal" id="bPal"></div>
   <div class="brow">
   <button class="del" id="bDelete" hidden><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg> Delete truck</button>
   <button class="drive" id="bDrive">Drive! <svg viewBox="0 0 24 24"><path d="M5 3.5v17L20.5 12z" fill="#FFF8E6" stroke="#22324A" stroke-width="2" stroke-linejoin="round"/></svg></button>
+  </div>
   </div>
 </div>
 
@@ -1662,6 +1696,21 @@ function goHome() {
 }
 document.getElementById('home').addEventListener('pointerdown', goHome);
 addEventListener('keydown', e => { if (e.code === 'Escape') goHome(); });
+/* make buttons in the menus respond to a tap even if the browser drops the click */
+{
+  const SEL = '#settings button, #builder button, #start .iconbtn';
+  let downBtn = null, dx = 0, dy = 0, lastTap = 0, tx = 0, ty = 0;
+  document.addEventListener('pointerdown', e => { downBtn = e.target.closest(SEL); dx = e.clientX; dy = e.clientY; }, true);
+  document.addEventListener('pointerup', e => {
+    const b = e.target.closest(SEL);
+    if (!b || b !== downBtn || b.disabled || Math.hypot(e.clientX - dx, e.clientY - dy) > 12) return;
+    lastTap = performance.now(); tx = e.clientX; ty = e.clientY; b.click();
+  }, true);
+  document.addEventListener('click', e => {
+    const dt_ = performance.now() - lastTap;
+    if (e.isTrusted && (dt_ < 400 || (dt_ < 2000 && Math.hypot(e.clientX - tx, e.clientY - ty) < 25))) { e.stopImmediatePropagation(); e.preventDefault(); }
+  }, true);
+}
 /* settings */
 let playMins = 3, steerHelp = true;
 const settingsEl = document.getElementById('settings');
@@ -1839,15 +1888,21 @@ const builderEl = document.getElementById('builder'), bGridEl = document.getElem
 const hex = k => '#' + LEGO_COL[k].toString(16).padStart(6, '0');
 for (let r = 0; r < B_ROWS; r++) for (let c = 0; c < B_COLS; c++) {
   const d = document.createElement('div'); d.className = 'bcell'; d.dataset.r = r; d.dataset.c = c;
-  d.style.gridRow = r + 1; d.style.gridColumn = c + 1; bGridEl.appendChild(d);
+  bGridEl.appendChild(d);
 }
 const curSize = () => { const [h, w] = SIZES[bSize]; return bTurn ? [w, h] : [h, w]; };
 function brickAt(r, c) { return bBricks.findIndex(b => r >= b.r && r < b.r + b.h && c >= b.c && c < b.c + b.w); }
+let bLand = false;
+function gridArea(el, r, c, h, w) {          // landscape shows the truck sideways, front on the right
+  if (bLand) { el.style.gridRow = `${c + 1} / span ${w}`; el.style.gridColumn = `${B_ROWS - r - h + 1} / span ${h}`; }
+  else { el.style.gridRow = `${r + 1} / span ${h}`; el.style.gridColumn = `${c + 1} / span ${w}`; }
+}
+function placeCells() { bGridEl.querySelectorAll('.bcell').forEach(d => gridArea(d, +d.dataset.r, +d.dataset.c, 1, 1)); }
 function renderBricks() {
   bGridEl.querySelectorAll('.bbrick').forEach(e => e.remove());
   bBricks.forEach(b => {
     const d = document.createElement('div'); d.className = 'bbrick';
-    d.style.gridRow = `${b.r + 1} / span ${b.h}`; d.style.gridColumn = `${b.c + 1} / span ${b.w}`; d.style.backgroundColor = hex(b.k);
+    gridArea(d, b.r, b.c, b.h, b.w); d.style.backgroundColor = hex(b.k);
     bGridEl.appendChild(d);
   });
 }
@@ -1869,7 +1924,7 @@ function sizeIcon(h, w) {
   const s = 9, pad = 3, W = w * s + pad * 2, H = h * s + pad * 2, col_ = bColor ? hex(bColor) : '#C9CDD4';
   let dots = '';
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) dots += `<circle cx="${pad + x * s + s / 2}" cy="${pad + y * s + s / 2}" r="2.6" fill="rgba(255,255,255,.45)" stroke="rgba(0,0,0,.25)" stroke-width=".8"/>`;
-  return `<svg viewBox="0 0 ${W} ${H}" style="width:${Math.min(44, W * 1.2)}px;height:auto"><rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="3" fill="${col_}" stroke="#22324A" stroke-width="2"/>${dots}</svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:${Math.min(38, W)}px;height:auto"><rect x="1" y="1" width="${W - 2}" height="${H - 2}" rx="3" fill="${col_}" stroke="#22324A" stroke-width="2"/>${dots}</svg>`;
 }
 function renderSizes() {
   bSizeEl.innerHTML = '';
@@ -1909,13 +1964,33 @@ bGridEl.addEventListener('pointermove', e => {
 ['pointerup', 'pointercancel'].forEach(ev => bGridEl.addEventListener(ev, () => { painting = false; lastCell = ''; }));
 
 const delBtn = document.getElementById('bDelete');
+function fitBuilder() {
+  bLand = innerWidth > innerHeight;
+  builderEl.classList.toggle('land', bLand);
+  placeCells(); renderBricks();
+  builderEl.style.setProperty('--cell', '10px');
+  const R = id => builderEl.querySelector(id).getBoundingClientRect();
+  const head = R('.bhead'), ctrl = R('#bCtrl'), board = R('.bboard'), cs = getComputedStyle(builderEl);
+  const padV = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) + 8, padH = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) + 8;
+  const long = B_ROWS + 0.9;
+  let cell;
+  if (bLand) {
+    const fromW = 10 + (innerWidth - padH - ctrl.width - 18 - board.width) / long;
+    const fromH = 10 + (innerHeight - padV - head.height - 8 - board.height) / B_COLS;
+    cell = Math.min(fromW, fromH);
+  } else {
+    const fromH = 10 + (innerHeight - padV - head.height - ctrl.height - 20 - board.height) / long;
+    const fromW = 10 + (innerWidth - padH - board.width) / B_COLS;
+    cell = Math.min(fromH, fromW);
+  }
+  builderEl.style.setProperty('--cell', Math.max(9, Math.min(36, Math.floor(cell))) + 'px');
+}
 function openBuilder() {
   initAudio();
-  const cell = Math.max(11, Math.min(32, Math.floor(Math.min((innerWidth - 60) / B_COLS, (innerHeight - 420) / (B_ROWS + 1)) - 2)));
-  builderEl.style.setProperty('--cell', cell + 'px');
   delBtn.hidden = !VEHICLES[7]; delBtn.classList.remove('sure'); delBtn.lastChild.textContent = ' Delete truck';
-  renderBricks(); renderSizes(); builderEl.classList.add('show');
+  renderSizes(); builderEl.classList.add('show'); fitBuilder();
 }
+addEventListener('resize', () => { if (builderEl.classList.contains('show')) setTimeout(fitBuilder, 60); });
 function buildThumb() {
   const cv = document.createElement('canvas'), cs = 6, ox = 6, oy = 12; cv.width = 160; cv.height = 84;
   const g = cv.getContext('2d');
